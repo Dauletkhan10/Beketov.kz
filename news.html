@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новости - BEKETOV</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rubik', sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            background: #1a1a1a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .logo::before {
+            content: "🦁";
+            margin-right: 10px;
+            font-size: 30px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 400;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffd700;
+        }
+        
+        .cta-button {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .cta-button:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding: 60px 0;
+            background: #2a2a2a;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .page-title {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 60px;
+            color: #fff;
+            font-weight: 300;
+            font-style: italic;
+        }
+        /* Modal Window */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(139, 69, 19, 0.95);
+            border-radius: 25px;
+            padding: 40px 35px;
+            min-width: 350px;
+            max-width: 90vw;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            color: white;
+            font-size: 32px;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .modal-input {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background: white;
+            color: #333;
+        }
+
+        .modal-input::placeholder {
+            color: #999;
+        }
+
+        .modal-textarea {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background: white;
+            color: #333;
+            resize: vertical;
+            min-height: 80px;
+            font-family: Arial, sans-serif;
+        }
+
+        .modal-textarea::placeholder {
+            color: #999;
+        }
+
+        .modal-submit {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-top: 10px;
+        }
+
+        .modal-submit:hover {
+            transform: translateY(-2px);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: #ccc;
+        } 
+
+        /* News Grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .news-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .news-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .news-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="60" fill="%23333"/><rect width="100" height="40" y="60" fill="%23222"/><circle cx="50" cy="30" r="15" fill="%23555"/></svg>');
+            background-size: cover;
+            opacity: 0.3;
+        }
+        
+        .speaker-silhouette {
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .news-content {
+            padding: 25px;
+        }
+        
+        .news-text {
+            color: #ccc;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .read-more {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .read-more:hover {
+            background: rgba(255, 215, 0, 0.3);
+            transform: translateX(5px);
+        }
+        
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+        
+        .footer-section h3 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+        
+        .footer-section a:hover {
+            color: #ffd700;
+        }
+        
+        .footer-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .footer-form input {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: #fff;
+            font-size: 14px;
+        }
+        
+        .footer-form input::placeholder {
+            color: #aaa;
+        }
+        
+        .footer-form button {
+            background: #dc3545;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+        
+        .footer-form button:hover {
+            background: #c82333;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .footer-logo::before {
+            content: "🦁";
+            margin-right: 10px;
+            font-size: 40px;
+        }
+        
+        .footer-logo-section {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .page-title {
+                font-size: 36px;
+                margin-bottom: 40px;
+            }
+            
+            .news-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .news-card {
+                margin: 0 10px;
+            }
+            
+            .page-title {
+                font-size: 28px;
+            }
+        }
+        
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .news-card:nth-child(1) { animation-delay: 0.1s; }
+        .news-card:nth-child(2) { animation-delay: 0.2s; }
+        .news-card:nth-child(3) { animation-delay: 0.3s; }
+        .news-card:nth-child(4) { animation-delay: 0.4s; }
+        .news-card:nth-child(5) { animation-delay: 0.5s; }
+        .news-card:nth-child(6) { animation-delay: 0.6s; }
+        .news-card:nth-child(7) { animation-delay: 0.7s; }
+        .news-card:nth-child(8) { animation-delay: 0.8s; }
+        .news-card:nth-child(9) { animation-delay: 0.9s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">BEKETOV</div>
+            <ul class="nav-links">
+                <li><a href="#home">Главная</a></li>
+                <li><a href="projects.html">Проекты</a></li>
+                <li><a href="#news" class="active">Новости</a></li>
+                <li><a href="#contacts">Контакты</a></li>
+            </ul>
+            <a href="#contact" class="cta-button">Связаться</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <h1 class="page-title">Новости</h1>
+            
+            <div class="news-grid">
+                <article class="news-card fade-in">
+                    <div class="news-image">
+                        <div class="speaker-silhouette">👤</div>
+                    </div>
+                    <div class="news-content">
+                        <p class="news-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <a href="news1.html" class="read-more">Узнать больше</a>
+                    </div>
+                </article>
+                
+                <article class="news-card fade-in">
+                    <div class="news-image">
+                        <div class="speaker-silhouette">👤</div>
+                    </div>
+                    <div class="news-content">
+                        <p class="news-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <a href="#" class="read-more">Узнать больше</a>
+                    </div>
+                </article>
+                
+                <article class="news-card fade-in">
+                    <div class="news-image">
+                        <div class="speaker-silhouette">👤</div>
+                    </div>
+                    <div class="news-content">
+                        <p class="news-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <a href="#" class="read-more">Узнать больше</a>
+                    </div>
+                </article>
+                
+                <article class="news-card fade-in">
+                    <div class="news-image">
+                        <div class="speaker-silhouette">👤</div>
+                    </div>
+                    <div class="news-content">
+                        <p class="news-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <a href="#" class="read-more">Узнать больше</a>
+                    </div>
+                </article>
+                
+                <article class="news-card fade-in">
+                    <div class="news-image">
+                        <div class="speaker-silhouette">👤</div>
+                    </div>
+                    <div class="news-content">
+                        <p class="news-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <a href="#" class="read-more">Узнать больше</a>
+                    </div>
+                </article>
+                
+                <article class="news-card fade-in">
+                    <div class="news-image">
+                        <div class="speaker-silhouette">👤</div>
+                    </div>
+                    <div class="news-content">
+                        <p class="news-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <a href="#" class="read-more">Узнать больше</a>
+                    </div>
+                </article>
+                
+                <article class="news-card fade-in">
+                    <div class="news-image">
+                        <div class="speaker-silhouette">👤</div>
+                    </div>
+                    <div class="news-content">
+                        <p class="news-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <a href="#" class="read-more">Узнать больше</a>
+                    </div>
+                </article>
+                
+                <article class="news-card fade-in">
+                    <div class="news-image">
+                        <div class="speaker-silhouette">👤</div>
+                    </div>
+                    <div class="news-content">
+                        <p class="news-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <a href="#" class="read-more">Узнать больше</a>
+                    </div>
+                </article>
+                
+                <article class="news-card fade-in">
+                    <div class="news-image">
+                        <div class="speaker-silhouette">👤</div>
+                    </div>
+                    <div class="news-content">
+                        <p class="news-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <a href="#" class="read-more">Узнать больше</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section footer-logo-section">
+                    <div class="footer-logo">BEKETOV</div>
+                </div>
+                <div class="footer-section">
+                    <h3>Страницы</h3>
+                    <ul>
+                        <li><a href="#home">Главная</a></li>
+                        <li><a href="#contacts">Контакты</a></li>
+                        <li><a href="#projects">Проекты</a></li>
+                        <li><a href="#news">Новости</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <p style="color: #ccc;">••••••••••••••••••••</p>
+                    <p style="color: #ccc;">••••••••••••••</p>
+                    <p style="color: #ccc;">•••••</p>
+                    <p style="color: #ccc;">••••••••••••••</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Связаться</h3>
+                    <div class="footer-form">
+                        <input type="text" placeholder="Номер телефона">
+                        <input type="text" placeholder="Имя">
+                        <input type="text" placeholder="Сообщение">
+                        <button type="submit">Отправить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+     <!-- Modal Window -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title">Связаться</h2>
+            <form class="modal-form" onsubmit="submitModalForm(event)">
+                <input type="tel" class="modal-input" placeholder="Номер телефона" required>
+                <input type="text" class="modal-input" placeholder="Имя" required>
+                <textarea class="modal-textarea" placeholder="Сообщения" required></textarea>
+                <button type="submit" class="modal-submit">Отправить</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        // Обработка кнопки "Связаться" в хедере
+        document.querySelector('.cta-button').addEventListener('click', function() {
+            document.getElementById('contactModal').classList.add('active');
+        });
+         // Функции для модального окна
+        function closeModal() {
+            document.getElementById('contactModal').classList.remove('active');
+        }
+
+        function submitModalForm(e) {
+            e.preventDefault();
+            const phone = e.target.querySelector('input[type="tel"]').value;
+            const name = e.target.querySelector('input[type="text"]').value;
+            const message = e.target.querySelector('textarea').value;
+            
+            if (phone && name && message) {
+                alert('Сообщение отправлено! Мы свяжемся с вами в ближайшее время.');
+                e.target.reset();
+                closeModal();
+            }
+        }
+
+        // Закрытие модального окна при клике на overlay
+        document.getElementById('contactModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Закрытие модального окна при нажатии Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Form submission
+        document.querySelector('.footer-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Спасибо за ваше сообщение!');
+            this.reset();
+        });
+
+        // Read more functionality
+        // document.querySelectorAll('.read-more').forEach(link => {
+        //     link.addEventListener('click', function(e) {
+        //         e.preventDefault();
+        //         alert('Переход к полной статье...');
+        //     });
+        // });
+
+        // Add header background on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.9)';
+            }
+        });
+    </script>
+</body>
+</html>

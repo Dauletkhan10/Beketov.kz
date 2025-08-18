@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проекты - BEKETOV</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rubik', sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            background: #2a2a2a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .logo::before {
+            content: "🦁";
+            margin-right: 10px;
+            font-size: 30px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 400;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffd700;
+        }
+        
+        .cta-button {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .cta-button:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding: 60px 0;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .page-title {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 60px;
+            color: #fff;
+            font-weight: 300;
+            font-style: italic;
+        }
+        /* Modal Window */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(139, 69, 19, 0.95);
+            border-radius: 25px;
+            padding: 40px 35px;
+            min-width: 350px;
+            max-width: 90vw;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            color: white;
+            font-size: 32px;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .modal-input {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background: white;
+            color: #333;
+        }
+
+        .modal-input::placeholder {
+            color: #999;
+        }
+
+        .modal-textarea {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background: white;
+            color: #333;
+            resize: vertical;
+            min-height: 80px;
+            font-family: Arial, sans-serif;
+        }
+
+        .modal-textarea::placeholder {
+            color: #999;
+        }
+
+        .modal-submit {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-top: 10px;
+        }
+
+        .modal-submit:hover {
+            transform: translateY(-2px);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: #ccc;
+        } 
+
+        /* Projects Container */
+        .projects-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .project-card {
+            position: relative;
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .project-image {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+        
+        .project-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%);
+        }
+        
+        .project-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px;
+            z-index: 2;
+        }
+        
+        .project-title {
+            font-size: 24px;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        
+        .project-button {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        
+        .project-button:hover {
+            background: rgba(255, 215, 0, 0.3);
+            transform: translateX(5px);
+        }
+        
+        /* Project Images */
+        .project-1 {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300"><defs><linearGradient id="factory" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23FF6B35;stop-opacity:1" /><stop offset="100%" style="stop-color:%23F7931E;stop-opacity:1" /></linearGradient></defs><rect width="800" height="300" fill="url(%23factory)"/><rect x="50" y="150" width="100" height="120" fill="%23333" opacity="0.8"/><rect x="200" y="120" width="80" height="150" fill="%23444" opacity="0.8"/><rect x="320" y="100" width="120" height="170" fill="%23333" opacity="0.8"/><circle cx="100" cy="140" r="15" fill="%23FFD700"/><circle cx="240" cy="110" r="12" fill="%23FFD700"/><rect x="500" y="180" width="200" height="80" fill="%23555" opacity="0.9"/><text x="400" y="50" font-family="Arial" font-size="16" fill="white" text-anchor="middle">INDUSTRIAL FACILITY</text></svg>');
+        }
+        
+        .project-2 {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300"><defs><linearGradient id="crane" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%234A90E2;stop-opacity:1" /><stop offset="100%" style="stop-color:%23357ABD;stop-opacity:1" /></linearGradient></defs><rect width="800" height="300" fill="url(%23crane)"/><rect x="100" y="200" width="600" height="80" fill="%23B8860B" opacity="0.9"/><rect x="150" y="100" width="15" height="180" fill="%23FFD700" opacity="0.9"/><rect x="350" y="80" width="15" height="200" fill="%23FFD700" opacity="0.9"/><rect x="550" y="120" width="15" height="160" fill="%23FFD700" opacity="0.9"/><rect x="140" y="80" width="50" height="20" fill="%23FF6B35" opacity="0.8"/><rect x="540" y="100" width="50" height="20" fill="%23FF6B35" opacity="0.8"/><text x="400" y="50" font-family="Arial" font-size="16" fill="white" text-anchor="middle">CONSTRUCTION SITE</text></svg>');
+        }
+        
+        .project-3 {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300"><defs><linearGradient id="city" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%236C7B7F;stop-opacity:1" /><stop offset="100%" style="stop-color:%23B8BCC0;stop-opacity:1" /></linearGradient></defs><rect width="800" height="300" fill="url(%23city)"/><rect x="50" y="150" width="60" height="150" fill="%23333" opacity="0.8"/><rect x="130" y="100" width="80" height="200" fill="%23444" opacity="0.8"/><rect x="230" y="80" width="70" height="220" fill="%23333" opacity="0.8"/><rect x="320" y="120" width="90" height="180" fill="%23555" opacity="0.8"/><rect x="430" y="90" width="75" height="210" fill="%23333" opacity="0.8"/><rect x="530" y="140" width="65" height="160" fill="%23444" opacity="0.8"/><rect x="620" y="110" width="85" height="190" fill="%23333" opacity="0.8"/><rect x="100" y="280" width="600" height="20" fill="%23228B22" opacity="0.6"/><circle cx="170" cy="290" r="8" fill="%23228B22" opacity="0.8"/><circle cx="370" cy="290" r="8" fill="%23228B22" opacity="0.8"/><circle cx="570" cy="290" r="8" fill="%23228B22" opacity="0.8"/><text x="400" y="40" font-family="Arial" font-size="16" fill="white" text-anchor="middle">URBAN DEVELOPMENT</text></svg>');
+        }
+        
+        .project-4 {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300"><defs><linearGradient id="steel" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23C0392B;stop-opacity:1" /><stop offset="100%" style="stop-color:%23E74C3C;stop-opacity:1" /></linearGradient></defs><rect width="800" height="300" fill="url(%23steel)"/><circle cx="100" cy="150" r="40" fill="%23B8860B" opacity="0.9"/><circle cx="200" cy="150" r="40" fill="%23B8860B" opacity="0.9"/><circle cx="300" cy="150" r="40" fill="%23B8860B" opacity="0.9"/><circle cx="400" cy="150" r="40" fill="%23B8860B" opacity="0.9"/><circle cx="500" cy="150" r="40" fill="%23B8860B" opacity="0.9"/><circle cx="600" cy="150" r="40" fill="%23B8860B" opacity="0.9"/><circle cx="700" cy="150" r="40" fill="%23B8860B" opacity="0.9"/><rect x="80" y="190" width="40" height="80" fill="%238B4513" opacity="0.8"/><rect x="180" y="190" width="40" height="80" fill="%238B4513" opacity="0.8"/><rect x="280" y="190" width="40" height="80" fill="%238B4513" opacity="0.8"/><rect x="380" y="190" width="40" height="80" fill="%238B4513" opacity="0.8"/><rect x="480" y="190" width="40" height="80" fill="%238B4513" opacity="0.8"/><rect x="580" y="190" width="40" height="80" fill="%238B4513" opacity="0.8"/><rect x="680" y="190" width="40" height="80" fill="%238B4513" opacity="0.8"/><text x="400" y="50" font-family="Arial" font-size="16" fill="white" text-anchor="middle">STEEL PRODUCTION</text></svg>');
+        }
+        
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+        
+        .footer-section h3 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+        
+        .footer-section a:hover {
+            color: #ffd700;
+        }
+        
+        .footer-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .footer-form input {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: #fff;
+            font-size: 14px;
+        }
+        
+        .footer-form input::placeholder {
+            color: #aaa;
+        }
+        
+        .footer-form button {
+            background: #dc3545;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+        
+        .footer-form button:hover {
+            background: #c82333;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .footer-logo::before {
+            content: "🦁";
+            margin-right: 10px;
+            font-size: 40px;
+        }
+        
+        .footer-logo-section {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .page-title {
+                font-size: 36px;
+                margin-bottom: 40px;
+            }
+            
+            .project-card {
+                height: 250px;
+            }
+            
+            .project-content {
+                padding: 20px;
+            }
+            
+            .project-title {
+                font-size: 20px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+        }
+        
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .project-card:nth-child(1) { animation-delay: 0.1s; }
+        .project-card:nth-child(2) { animation-delay: 0.2s; }
+        .project-card:nth-child(3) { animation-delay: 0.3s; }
+        .project-card:nth-child(4) { animation-delay: 0.4s; }
+        
+        /* Hover effects */
+        .project-card:hover .project-image::before {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.1) 100%);
+        }
+        
+        .project-card:hover .project-title {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">BEKETOV</div>
+            <ul class="nav-links">
+                <li><a href="#home">Главная</a></li>
+                <li><a href="#projects" class="active">Проекты</a></li>
+                <li><a href="#news">Новости</a></li>
+                <li><a href="#contacts">Контакты</a></li>
+            </ul>
+            <a href="#contact" class="cta-button">Связаться</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <h1 class="page-title">Проекты</h1>
+            
+            <div class="projects-container">
+                <div class="project-card fade-in project-1">
+                    <div class="project-image">
+                        <div class="project-content">
+                            <h2 class="project-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+                            <a href="#" class="project-button">Узнать больше</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card fade-in project-2">
+                    <div class="project-image">
+                        <div class="project-content">
+                            <h2 class="project-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+                            <a href="#" class="project-button">Узнать больше</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card fade-in project-3">
+                    <div class="project-image">
+                        <div class="project-content">
+                            <h2 class="project-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+                            <a href="#" class="project-button">Узнать больше</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card fade-in project-4">
+                    <div class="project-image">
+                        <div class="project-content">
+                            <h2 class="project-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+                            <a href="#" class="project-button">Узнать больше</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section footer-logo-section">
+                    <div class="footer-logo">BEKETOV</div>
+                </div>
+                <div class="footer-section">
+                    <h3>Страницы</h3>
+                    <ul>
+                        <li><a href="#home">Главная</a></li>
+                        <li><a href="#contacts">Контакты</a></li>
+                        <li><a href="#projects">Проекты</a></li>
+                        <li><a href="#news">Новости</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <p style="color: #ccc;">••••••••••••••••••••</p>
+                    <p style="color: #ccc;">••••••••••••••</p>
+                    <p style="color: #ccc;">•••••</p>
+                    <p style="color: #ccc;">••••••••••••••</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Связаться</h3>
+                    <div class="footer-form">
+                        <input type="text" placeholder="Номер телефона">
+                        <input type="text" placeholder="Имя">
+                        <input type="text" placeholder="Сообщения">
+                        <button type="submit">Отправить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+     <!-- Modal Window -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title">Связаться</h2>
+            <form class="modal-form" onsubmit="submitModalForm(event)">
+                <input type="tel" class="modal-input" placeholder="Номер телефона" required>
+                <input type="text" class="modal-input" placeholder="Имя" required>
+                <textarea class="modal-textarea" placeholder="Сообщения" required></textarea>
+                <button type="submit" class="modal-submit">Отправить</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Project button functionality
+        document.querySelectorAll('.project-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Переход к деталям проекта...');
+            });
+        });
+        // Обработка кнопки "Связаться" в хедере
+        document.querySelector('.cta-button').addEventListener('click', function() {
+            document.getElementById('contactModal').classList.add('active');
+        });
+         // Функции для модального окна
+        function closeModal() {
+            document.getElementById('contactModal').classList.remove('active');
+        }
+
+        function submitModalForm(e) {
+            e.preventDefault();
+            const phone = e.target.querySelector('input[type="tel"]').value;
+            const name = e.target.querySelector('input[type="text"]').value;
+            const message = e.target.querySelector('textarea').value;
+            
+            if (phone && name && message) {
+                alert('Сообщение отправлено! Мы свяжемся с вами в ближайшее время.');
+                e.target.reset();
+                closeModal();
+            }
+        }
+
+        // Закрытие модального окна при клике на overlay
+        document.getElementById('contactModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Закрытие модального окна при нажатии Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Form submission
+        document.querySelector('.footer-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Спасибо за ваше сообщение!');
+            this.reset();
+        });
+
+        // Add header background on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.9)';
+            }
+        });
+
+        // Add parallax effect to project cards
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const projectCards = document.querySelectorAll('.project-card');
+            
+            projectCards.forEach((card, index) => {
+                const rate = scrolled * -0.1;
+                card.style.transform = `translateY(${rate}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

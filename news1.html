@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новость - BEKETOV</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rubik', sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            background: #2a2a2a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .logo::before {
+            content: "🦁";
+            margin-right: 10px;
+            font-size: 30px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 400;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffd700;
+        }
+        
+        .cta-button {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .cta-button:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding: 60px 0;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .article-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .article-title {
+            font-size: 42px;
+            font-weight: 300;
+            font-style: italic;
+            color: #fff;
+            margin-bottom: 30px;
+            line-height: 1.3;
+        }
+        
+        .article-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+            margin-bottom: 80px;
+        }
+        
+        /* Image Slider */
+        .image-slider {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            height: 400px;
+        }
+        
+        .slider-image {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .slider-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .speaker-figure {
+            width: 60%;
+            height: 80%;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .speaker-silhouette {
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+        
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: #333;
+            transition: all 0.3s;
+        }
+        
+        .slider-nav:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .prev {
+            left: 20px;
+        }
+        
+        .next {
+            right: 20px;
+        }
+        
+        /* Article Text */
+        .article-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #ccc;
+        }
+        
+        .article-text p {
+            margin-bottom: 20px;
+        }
+        
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+        
+        .footer-section h3 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+        
+        .footer-section a:hover {
+            color: #ffd700;
+        }
+        
+        .footer-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .footer-form input {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: #fff;
+            font-size: 14px;
+        }
+        
+        .footer-form input::placeholder {
+            color: #aaa;
+        }
+        
+        .footer-form button {
+            background: #dc3545;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+        
+        .footer-form button:hover {
+            background: #c82333;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .footer-logo::before {
+            content: "🦁";
+            margin-right: 10px;
+            font-size: 40px;
+        }
+        
+        .footer-logo-section {
+            display: flex;
+            flex-direction: column;
+        }
+        /* Modal Window */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(139, 69, 19, 0.95);
+            border-radius: 25px;
+            padding: 40px 35px;
+            min-width: 350px;
+            max-width: 90vw;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            color: white;
+            font-size: 32px;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .modal-input {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background: white;
+            color: #333;
+        }
+
+        .modal-input::placeholder {
+            color: #999;
+        }
+
+        .modal-textarea {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background: white;
+            color: #333;
+            resize: vertical;
+            min-height: 80px;
+            font-family: Arial, sans-serif;
+        }
+
+        .modal-textarea::placeholder {
+            color: #999;
+        }
+
+        .modal-submit {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-top: 10px;
+        }
+
+        .modal-submit:hover {
+            transform: translateY(-2px);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: #ccc;
+        } 
+
+        /* Mobile Responsive */
+        @media (max-width: 968px) {
+            .article-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .article-title {
+                font-size: 32px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .article-title {
+                font-size: 28px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            .image-slider {
+                height: 300px;
+            }
+            
+            .slider-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+        
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .article-header {
+            animation-delay: 0.1s;
+        }
+        
+        .image-slider {
+            animation-delay: 0.2s;
+        }
+        
+        .article-text {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">BEKETOV</div>
+            <ul class="nav-links">
+                <li><a href="#home">Главная</a></li>
+                <li><a href="#projects">Проекты</a></li>
+                <li><a href="#news" class="active">Новости</a></li>
+                <li><a href="#contacts">Контакты</a></li>
+            </ul>
+            <a href="#contact" class="cta-button">Связаться</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <div class="article-header fade-in">
+                <h1 class="article-title">
+                    Lorem ipsum dolor sit amet,<br>
+                    consectetur adipiscing elit.
+                </h1>
+            </div>
+            
+            <div class="article-content">
+                <div class="image-slider fade-in">
+                    <div class="slider-image">
+                        <div class="speaker-figure">
+                            <div class="speaker-silhouette">👤</div>
+                        </div>
+                    </div>
+                    <button class="slider-nav prev">‹</button>
+                    <button class="slider-nav next">›</button>
+                </div>
+                
+                <div class="article-text fade-in">
+                    <p>Sed nisl diam, ultricies vitae enim eget, dignissim molestie elit. Fusce sollicitudin massa et ornare pulvinar. Aenean pellentesque massa non euismod imperdiet. Donec aliquet dignissim erat, non ullamcorper metus blandit sit amet. Morbi molestie volutpat laoreet. Nulla facilisi.</p>
+                    
+                    <p>Pellentesque varius luctus nunc, in consequat nisl lacinia faucibus. Proin consectetur sagittis metus, ut sodales lorem varius a. Pellentesque consequat blandit lacus, eget consectetur mi ullamcorper vitae. Curabitur imperdiet, velit nec vulputate gravida, mauris lacus imperdiet neque, quis ullamcorper arcu nibh in libero.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section footer-logo-section">
+                    <div class="footer-logo">BEKETOV</div>
+                </div>
+                <div class="footer-section">
+                    <h3>Страницы</h3>
+                    <ul>
+                        <li><a href="#home">Главная</a></li>
+                        <li><a href="#contacts">Контакты</a></li>
+                        <li><a href="#projects">Проекты</a></li>
+                        <li><a href="#news">Новости</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <p style="color: #ccc;">••••••••••••••••••••</p>
+                    <p style="color: #ccc;">••••••••••••••</p>
+                    <p style="color: #ccc;">•••••</p>
+                    <p style="color: #ccc;">••••••••••••••</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Связаться</h3>
+                    <div class="footer-form">
+                        <input type="text" placeholder="Номер телефона">
+                        <input type="text" placeholder="Имя">
+                        <input type="text" placeholder="Сообщения">
+                        <button type="submit">Отправить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+     <!-- Modal Window -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title">Связаться</h2>
+            <form class="modal-form" onsubmit="submitModalForm(event)">
+                <input type="tel" class="modal-input" placeholder="Номер телефона" required>
+                <input type="text" class="modal-input" placeholder="Имя" required>
+                <textarea class="modal-textarea" placeholder="Сообщения" required></textarea>
+                <button type="submit" class="modal-submit">Отправить</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Slider functionality
+        let currentSlide = 0;
+        const slides = [
+            { speaker: '👤', bg: 'linear-gradient(135deg, #4a90e2 0%, #357abd 100%)' },
+            { speaker: '🎤', bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+            { speaker: '📊', bg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
+        ];
+
+        function updateSlide() {
+            const sliderImage = document.querySelector('.slider-image');
+            const speakerSilhouette = document.querySelector('.speaker-silhouette');
+            
+            sliderImage.style.background = slides[currentSlide].bg;
+            speakerSilhouette.textContent = slides[currentSlide].speaker;
+        }
+
+        document.querySelector('.prev').addEventListener('click', function() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateSlide();
+        });
+
+        document.querySelector('.next').addEventListener('click', function() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlide();
+        });
+
+        // Auto-slide every 5 seconds
+        setInterval(function() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlide();
+        }, 5000);
+        // Обработка кнопки "Связаться" в хедере
+        document.querySelector('.cta-button').addEventListener('click', function() {
+            document.getElementById('contactModal').classList.add('active');
+        });
+         // Функции для модального окна
+        function closeModal() {
+            document.getElementById('contactModal').classList.remove('active');
+        }
+
+        function submitModalForm(e) {
+            e.preventDefault();
+            const phone = e.target.querySelector('input[type="tel"]').value;
+            const name = e.target.querySelector('input[type="text"]').value;
+            const message = e.target.querySelector('textarea').value;
+            
+            if (phone && name && message) {
+                alert('Сообщение отправлено! Мы свяжемся с вами в ближайшее время.');
+                e.target.reset();
+                closeModal();
+            }
+        }
+
+        // Закрытие модального окна при клике на overlay
+        document.getElementById('contactModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Закрытие модального окна при нажатии Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Form submission
+        document.querySelector('.footer-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Спасибо за ваше сообщение!');
+            this.reset();
+        });
+
+        // Add header background on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.9)';
+            }
+        });
+
+        // Back to news functionality
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (confirm('Вернуться к списку новостей?')) {
+                    history.back();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
