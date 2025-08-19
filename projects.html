@@ -476,10 +476,10 @@
         <nav class="container">
             <div class="logo">BEKETOV</div>
             <ul class="nav-links">
-                <li><a href="#home">Главная</a></li>
-                <li><a href="#projects" class="active">Проекты</a></li>
-                <li><a href="#news">Новости</a></li>
-                <li><a href="#contacts">Контакты</a></li>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="projects.html" class="active">Проекты</a></li>
+                <li><a href="news.html">Новости</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
             </ul>
             <a href="#contact" class="cta-button">Связаться</a>
         </nav>
@@ -495,7 +495,7 @@
                     <div class="project-image">
                         <div class="project-content">
                             <h2 class="project-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
-                            <a href="#" class="project-button">Узнать больше</a>
+                            <a href="projects1.html" class="project-button">Узнать больше</a>
                         </div>
                     </div>
                 </div>
@@ -600,13 +600,7 @@
             observer.observe(el);
         });
 
-        // Project button functionality
-        document.querySelectorAll('.project-button').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('Переход к деталям проекта...');
-            });
-        });
+       
         // Обработка кнопки "Связаться" в хедере
         document.querySelector('.cta-button').addEventListener('click', function() {
             document.getElementById('contactModal').classList.add('active');
